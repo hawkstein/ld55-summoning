@@ -11,28 +11,28 @@ const levels = [
     gridSize: { rows: 4, columns: 4, density: 0.7 },
   },
   {
-    gridSize: { rows: 5, columns: 5, density: 0.7 },
+    gridSize: { rows: 5, columns: 5, density: 0.6 },
   },
   {
-    gridSize: { rows: 6, columns: 6, density: 0.7 },
+    gridSize: { rows: 6, columns: 6, density: 0.6 },
   },
   {
-    gridSize: { rows: 6, columns: 6, density: 0.7 },
+    gridSize: { rows: 6, columns: 6, density: 0.5 },
   },
   {
-    gridSize: { rows: 7, columns: 7, density: 0.7 },
+    gridSize: { rows: 7, columns: 7, density: 0.5 },
   },
   {
-    gridSize: { rows: 8, columns: 8, density: 0.7 },
+    gridSize: { rows: 8, columns: 8, density: 0.4 },
   },
   {
-    gridSize: { rows: 8, columns: 9, density: 0.7 },
+    gridSize: { rows: 8, columns: 9, density: 0.4 },
   },
   {
-    gridSize: { rows: 9, columns: 9, density: 0.7 },
+    gridSize: { rows: 9, columns: 9, density: 0.3 },
   },
   {
-    gridSize: { rows: 10, columns: 10, density: 0.7 },
+    gridSize: { rows: 10, columns: 10, density: 0.2 },
   },
 ]
 
@@ -160,5 +160,25 @@ export class Game extends Scene {
           .events.emit("check", { level: this.level, mistakes })
       }
     )
+
+    this.add
+      .rectangle(
+        this.camera.centerX,
+        this.summonButton.y - 40,
+        16,
+        32,
+        PaletteNum.HotPanda.Red
+      )
+      .setOrigin(0.5)
+
+    this.add
+      .rectangle(
+        this.camera.centerX,
+        20,
+        48,
+        32,
+        PaletteNum.HotPanda.Background
+      )
+      .setOrigin(0.5)
   }
 }
