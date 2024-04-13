@@ -6,6 +6,7 @@ import TextButton from "../lib/TextButton"
 
 export class MainMenu extends Scene {
   title: GameObjects.BitmapText
+  fullscreen: boolean = false
 
   constructor() {
     super("MainMenu")
@@ -25,8 +26,10 @@ export class MainMenu extends Scene {
     const menu = [
       this.title,
       new TextButton(this, camera.centerX, 0, "Start", () => {
-        // this.scale.startFullscreen()
-        this.scene.start("Game")
+        if (this.fullscreen) {
+          this.scale.startFullscreen()
+        }
+        this.scene.start("Game", { level: 0 })
       }),
 
       new TextButton(this, camera.centerX, 0, "Options", () => {

@@ -2,6 +2,7 @@ import { PaletteHash } from "./lib/Palette"
 import { Boot } from "./scenes/Boot"
 import { Game as MainGame } from "./scenes/Game"
 import { GameOver } from "./scenes/GameOver"
+import { LevelScore } from "./scenes/LevelScore"
 import { MainMenu } from "./scenes/MainMenu"
 import { Preloader } from "./scenes/Preloader"
 import { SummonHud } from "./scenes/SummonHud"
@@ -44,7 +45,7 @@ const config: Types.Core.GameConfig = {
   dom: {
     createContainer: true,
   },
-  scene: [Boot, Preloader, MainMenu, MainGame, GameOver, SummonHud],
+  scene: [Boot, Preloader, MainMenu, MainGame, GameOver, SummonHud, LevelScore],
 }
 
 export default new Game(config)
