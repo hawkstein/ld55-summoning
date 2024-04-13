@@ -1,3 +1,5 @@
+import { Enemy } from "./game/Enemy"
+import { Human } from "./game/Human"
 import { PaletteHash } from "./lib/Palette"
 import { Boot } from "./scenes/Boot"
 import { Game as MainGame } from "./scenes/Game"
@@ -49,3 +51,23 @@ const config: Types.Core.GameConfig = {
 }
 
 export default new Game(config)
+
+Phaser.GameObjects.GameObjectFactory.register(
+  "enemy",
+  function (this: Phaser.GameObjects.GameObjectFactory, x: number, y: number) {
+    const enemy = new Enemy(this.scene, x, y)
+    this.displayList.add(enemy)
+    this.updateList.add(enemy)
+    return enemy
+  }
+)
+
+Phaser.GameObjects.GameObjectFactory.register(
+  "human",
+  function (this: Phaser.GameObjects.GameObjectFactory, x: number, y: number) {
+    const human = new Human(this.scene, x, y)
+    this.displayList.add(human)
+    this.updateList.add(human)
+    return human
+  }
+)

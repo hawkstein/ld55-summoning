@@ -9,41 +9,41 @@ import { TEAL_16 } from "../lib/BitmapFontKey"
 const levels = [
   {
     gridSize: { rows: 4, columns: 4, density: 0.7 },
-    enemies: 0,
+    waves: [{ enemies: 0 }],
   },
   {
     gridSize: { rows: 5, columns: 5, density: 0.6 },
-    enemies: 0,
+    waves: [{ enemies: 1 }],
   },
   {
     gridSize: { rows: 6, columns: 6, density: 0.6 },
-    enemies: 0,
+    waves: [{ enemies: 2 }],
   },
   {
     gridSize: { rows: 6, columns: 6, density: 0.5 },
-    enemies: 0,
+    waves: [{ enemies: 5 }],
   },
   {
     gridSize: { rows: 7, columns: 7, density: 0.5 },
-    enemies: 0,
+    waves: [{ enemies: 5 }],
   },
   {
     gridSize: { rows: 8, columns: 8, density: 0.4 },
-    enemies: 0,
+    waves: [{ enemies: 5 }],
   },
   {
     gridSize: { rows: 8, columns: 9, density: 0.4 },
-    enemies: 0,
+    waves: [{ enemies: 5 }],
   },
   {
     gridSize: { rows: 9, columns: 9, density: 0.3 },
-    enemies: 0,
+    waves: [{ enemies: 5 }],
   },
   {
     gridSize: { rows: 10, columns: 10, density: 0.2 },
-    enemies: 0,
+    waves: [{ enemies: 5 }],
   },
-]
+] as const
 
 export class Game extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera
@@ -185,5 +185,12 @@ export class Game extends Scene {
         PaletteNum.HotPanda.Background
       )
       .setOrigin(0.5)
+
+    const enemies = levels[this.level].waves[0].enemies
+    for (let i = 0; i < enemies; i++) {
+      const x = Phaser.Math.Between(0, this.camera.width)
+      const y = Phaser.Math.Between(0, 20)
+      this.add.enemy(x, y)
+    }
   }
 }
