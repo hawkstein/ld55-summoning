@@ -1,9 +1,8 @@
 import { Physics } from "phaser"
 
 export class Enemy extends Physics.Arcade.Sprite {
-  constructor(scene: Phaser.Scene) {
-    const camera = scene.cameras.main
-    super(scene, camera.centerX, camera.height + 70, "textures", "Enemy.png")
+  constructor(scene: Phaser.Scene, x: number, y: number) {
+    super(scene, x, y, "textures", "Enemy.png")
     scene.add.existing(this)
     scene.physics.add.existing(this)
     this.setOrigin(0.5)
@@ -11,4 +10,15 @@ export class Enemy extends Physics.Arcade.Sprite {
   }
 
   update() {}
+  changeColor() {}
 }
+
+Phaser.GameObjects.GameObjectFactory.register(
+  "enemy",
+  function (this: Phaser.GameObjects.GameObjectFactory, x: number, y: number) {
+    const enemy = new Enemy(this.scene, x, y)
+    this.displayList.add(enemy)
+    this.updateList.add(enemy)
+    return enemy
+  }
+)
