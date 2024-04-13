@@ -9,30 +9,39 @@ import { TEAL_16 } from "../lib/BitmapFontKey"
 const levels = [
   {
     gridSize: { rows: 4, columns: 4, density: 0.7 },
+    enemies: 0,
   },
   {
     gridSize: { rows: 5, columns: 5, density: 0.6 },
+    enemies: 0,
   },
   {
     gridSize: { rows: 6, columns: 6, density: 0.6 },
+    enemies: 0,
   },
   {
     gridSize: { rows: 6, columns: 6, density: 0.5 },
+    enemies: 0,
   },
   {
     gridSize: { rows: 7, columns: 7, density: 0.5 },
+    enemies: 0,
   },
   {
     gridSize: { rows: 8, columns: 8, density: 0.4 },
+    enemies: 0,
   },
   {
     gridSize: { rows: 8, columns: 9, density: 0.4 },
+    enemies: 0,
   },
   {
     gridSize: { rows: 9, columns: 9, density: 0.3 },
+    enemies: 0,
   },
   {
     gridSize: { rows: 10, columns: 10, density: 0.2 },
+    enemies: 0,
   },
 ]
 
@@ -63,7 +72,7 @@ export class Game extends Scene {
       gridSize.columns,
       gridSize.density
     )
-    console.log(puzzle)
+
     this.grid = puzzle.grid as number[][]
     const rowHints = puzzle.rowHints as number[][]
     const columnHints = puzzle.columnHints as number[][]
@@ -105,17 +114,13 @@ export class Game extends Scene {
       })
     })
 
-    this.input.on(
-      "pointerup",
-      function (pointer: Phaser.Input.Pointer) {
-        const tile = map.getTileAtWorldXY(pointer.worldX, pointer.worldY)
-        if (tile) {
-          let updatedIndex = tile.index + 1
-          tile.index = updatedIndex > 2 ? 0 : updatedIndex
-        }
-      },
-      this
-    )
+    this.input.on("pointerup", (pointer: Phaser.Input.Pointer) => {
+      const tile = map.getTileAtWorldXY(pointer.worldX, pointer.worldY)
+      if (tile) {
+        let updatedIndex = tile.index + 1
+        tile.index = updatedIndex > 2 ? 0 : updatedIndex
+      }
+    })
 
     this.events.on("summoned", () => {
       this.state = "summoned"
