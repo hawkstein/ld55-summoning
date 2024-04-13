@@ -51,6 +51,7 @@ export class Game extends Scene {
   level: number = 0
   state: "summoning" | "summoned" = "summoning"
   summonButton: TextButton
+  enemies: Phaser.GameObjects.Group
 
   constructor() {
     super("Game")
@@ -122,13 +123,27 @@ export class Game extends Scene {
       }
     })
 
-    this.events.on("summoned", () => {
+    this.events.on("summoned", ({ humans }: { humans: number }) => {
       this.state = "summoned"
       this.input.off("pointerup")
       this.summonButton.destroy()
-      this.time.delayedCall(3000, () => {
-        this.scene.start("LevelScore", { level: this.level })
-      })
+      if (this.enemies.getLength() === 0) {
+        this.time.delayedCall(3000, () => {
+          this.scene.start("LevelScore", { level: this.level })
+        })
+      }
+      const circle = new Phaser.Geom.Circle(
+        this.camera.centerX,
+        this.summonButton.y - 40,
+        16
+      )
+      const humansList = []
+      for (let i = 0; i < humans; i++) {
+        const x = Phaser.Math.Between(0, this.camera.width)
+        const y = Phaser.Math.Between(0, 20)
+        humansList.push(this.add.human(x, y))
+        Phaser.Actions.PlaceOnCircle(humansList, circle, 1, 4)
+      }
     })
 
     this.scene.launch("SummonHud")
@@ -186,11 +201,12 @@ export class Game extends Scene {
       )
       .setOrigin(0.5)
 
-    const enemies = levels[this.level].waves[0].enemies
-    for (let i = 0; i < enemies; i++) {
+    const numberOfEnemies = levels[this.level].waves[0].enemies
+    this.enemies = this.add.group()
+    for (let i = 0; i < numberOfEnemies; i++) {
       const x = Phaser.Math.Between(0, this.camera.width)
       const y = Phaser.Math.Between(0, 20)
-      this.add.enemy(x, y)
+      this.enemies.add(this.add.enemy(x, y))
     }
   }
 }

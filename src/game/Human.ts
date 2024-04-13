@@ -16,7 +16,7 @@ export class Human extends Physics.Arcade.Sprite {
 declare global {
   namespace Phaser.GameObjects {
     interface GameObjectFactory {
-      human(): Human
+      human(x: number, y: number): Human
     }
   }
 }

@@ -23,7 +23,7 @@ export class SummonHud extends Scene {
       () => {
         this.scene.setVisible(false, "SummonHud")
         this.scene.resume("Game")
-        this.scene.get("Game").events.emit("summoned")
+        this.scene.get("Game").events.emit("summoned", { humans: 3 })
         this.scene.setActive(false, "SummonHud")
       }
     ).setScale(0.5)
