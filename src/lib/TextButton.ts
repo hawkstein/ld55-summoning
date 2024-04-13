@@ -1,6 +1,6 @@
 import Phaser from "phaser"
 import { PaletteNum } from "./Palette"
-import { TEAL_16 } from "./BitmapFontKey"
+import { RED_20 } from "./BitmapFontKey"
 
 export default class TextButton extends Phaser.GameObjects.Container {
   private background: Phaser.GameObjects.Rectangle
@@ -25,18 +25,17 @@ export default class TextButton extends Phaser.GameObjects.Container {
         text,
         x: 0,
         y: 0,
-        font: TEAL_16,
+        font: RED_20,
       })
       .setOrigin(0.5)
-      .setScale(2)
 
     this.background = scene.add
       .rectangle(
         0,
         0,
-        this.text.width + 40,
-        this.text.height + 20,
-        PaletteNum.HotPanda.Red
+        this.text.width + 20,
+        this.text.height + 10,
+        PaletteNum.HotPanda.DarkBlue
       )
       .setOrigin(0.5)
     this.setInteractive({
@@ -54,15 +53,15 @@ export default class TextButton extends Phaser.GameObjects.Container {
   }
 
   private onButtonOver() {
-    this.background.fillColor = PaletteNum.HotPanda.Orange
+    this.background.fillColor = PaletteNum.HotPanda.Yellow
   }
 
   private onButtonOut() {
-    this.background.fillColor = PaletteNum.HotPanda.Red
+    this.background.fillColor = PaletteNum.HotPanda.DarkBlue
   }
 
   private onButtonUp() {
-    this.background.fillColor = PaletteNum.HotPanda.Red
+    this.background.fillColor = PaletteNum.HotPanda.DarkBlue
     this.callback()
   }
 }
