@@ -25,7 +25,7 @@ export class LevelScore extends Scene {
     const buttonText = hasCompletedAllLevels ? "Menu" : "Next\nLevel"
     const buttonHandler = hasCompletedAllLevels
       ? () => {
-          this.scene.start("Menu")
+          this.scene.start("MainMenu")
         }
       : () => {
           this.scene.start("Game", { level: nextLevel })
