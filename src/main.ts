@@ -4,6 +4,7 @@ import { Game as MainGame } from "./scenes/Game"
 import { GameOver } from "./scenes/GameOver"
 import { MainMenu } from "./scenes/MainMenu"
 import { Preloader } from "./scenes/Preloader"
+import { SummonHud } from "./scenes/SummonHud"
 
 import { Game, Types } from "phaser"
 
@@ -43,7 +44,7 @@ const config: Types.Core.GameConfig = {
   dom: {
     createContainer: true,
   },
-  scene: [Boot, Preloader, MainMenu, MainGame, GameOver],
+  scene: [Boot, Preloader, MainMenu, MainGame, GameOver, SummonHud],
 }
 
 export default new Game(config)

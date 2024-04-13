@@ -69,8 +69,16 @@ export class Game extends Scene {
       })
     })
 
+    this.scene.launch("SummonHud")
+    this.scene.get("SummonHud").events.once("start", () => {
+      this.scene.setVisible(false, "SummonHud")
+    })
+
     new TextButton(this, this.camera.centerX, 270, "Summon", () => {
       console.log("Summon!")
+      this.scene.pause("Game")
+      this.scene.setVisible(true, "SummonHud")
+      this.scene.setActive(true, "SummonHud")
     })
   }
 }
