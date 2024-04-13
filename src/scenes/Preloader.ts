@@ -1,46 +1,71 @@
-import { Scene } from 'phaser';
+import { Scene } from "phaser"
+import { getStoredSceneKey } from "./storeSceneKey"
+import { PaletteNum, PaletteRGB } from "../lib/Palette"
+import { TEAL_16, RED_20 } from "../lib/BitmapFontKey"
 
-export class Preloader extends Scene
-{
-    constructor ()
-    {
-        super('Preloader');
-    }
+const DEV_MODE = import.meta.env.MODE === "development"
+const LOAD_STORED_SCENE =
+  DEV_MODE && import.meta.env.VITE_LOAD_STORED_SCENE === "true"
 
-    init ()
-    {
-        //  We loaded this image in our Boot Scene, so we can display it here
-        this.add.image(512, 384, 'background');
+export class Preloader extends Scene {
+  private initTime = new Date().getTime()
 
-        //  A simple progress bar. This is the outline of the bar.
-        this.add.rectangle(512, 384, 468, 32).setStrokeStyle(1, 0xffffff);
+  constructor() {
+    super("Preloader")
+  }
 
-        //  This is the progress bar itself. It will increase in size from the left based on the % of progress.
-        const bar = this.add.rectangle(512-230, 384, 4, 28, 0xffffff);
+  init() {
+    this.time.addEvent({
+      delay: 200,
+      callback: () => {
+        const centerX = this.cameras.main.centerX
+        this.add.image(centerX, 100, "preload_title").setOrigin(0.5)
 
-        //  Use the 'progress' event emitted by the LoaderPlugin to update the loading bar
-        this.load.on('progress', (progress: number) => {
+        // Outline of progress bar
+        const outerWidth = this.scale.width - 20
+        const innerWidth = outerWidth - 8
+        this.add
+          .rectangle(centerX, 384, outerWidth, 32)
+          .setStrokeStyle(4, PaletteNum.HotPanda.DarkGreen)
+        const bar = this.add.rectangle(
+          centerX - innerWidth,
+          384,
+          4,
+          28,
+          PaletteNum.HotPanda.Green
+        )
+        this.load.on("progress", (progress: number) => {
+          bar.width = 4 + innerWidth * progress
+        })
+      },
+    })
+  }
 
-            //  Update the progress bar (our bar is 464px wide, so 100% = 464px)
-            bar.width = 4 + (460 * progress);
+  preload() {
+    this.load.setPath("assets")
+    this.load.bitmapFont(
+      TEAL_16,
+      "PressStart2P_Teal_16.png",
+      "PressStart2P_Teal_16.xml"
+    )
+    this.load.bitmapFont(
+      RED_20,
+      "PressStart2P_Red_20.png",
+      "PressStart2P_Red_20.xml"
+    )
+  }
 
-        });
-    }
-
-    preload ()
-    {
-        //  Load the assets for the game - Replace with your own assets
-        this.load.setPath('assets');
-
-        this.load.image('logo', 'logo.png');
-    }
-
-    create ()
-    {
-        //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
-        //  For example, you can define global animations here, so we can use them in other scenes.
-
-        //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-        this.scene.start('MainMenu');
-    }
+  create() {
+    const elapsed = new Date().getTime() - this.initTime
+    const storedKey = getStoredSceneKey()
+    this.cameras.main.fadeOut(
+      (storedKey && LOAD_STORED_SCENE) || elapsed < 100 ? 0 : 500,
+      PaletteRGB.HotPanda.DarkBlue.r,
+      PaletteRGB.HotPanda.DarkBlue.g,
+      PaletteRGB.HotPanda.DarkBlue.b
+    )
+    this.cameras.main.once("camerafadeoutcomplete", () => {
+      this.scene.start((LOAD_STORED_SCENE && storedKey) || "MainMenu")
+    })
+  }
 }
