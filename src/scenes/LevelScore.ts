@@ -20,14 +20,23 @@ export class LevelScore extends Scene {
     this.camera = this.cameras.main
     this.camera.setBackgroundColor(PaletteNum.HotPanda.Red)
 
+    const nextLevel = this.level + 1
+    const hasCompletedAllLevels = nextLevel >= 8
+    const buttonText = hasCompletedAllLevels ? "Menu" : "Next\nLevel"
+    const buttonHandler = hasCompletedAllLevels
+      ? () => {
+          this.scene.start("Menu")
+        }
+      : () => {
+          this.scene.start("Game", { level: nextLevel })
+        }
+
     new TextButton(
       this,
       this.camera.centerX,
       this.camera.height - 100,
-      "Next\nLevel",
-      () => {
-        this.scene.start("Game", { level: this.level + 1 })
-      }
+      buttonText,
+      buttonHandler
     )
   }
 }

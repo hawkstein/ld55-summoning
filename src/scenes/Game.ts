@@ -125,9 +125,9 @@ export class Game extends Scene {
       this.state = "summoned"
       this.input.off("pointerup")
       this.summonButton.destroy()
-      // this.time.delayedCall(1000, () => {
-      //   this.scene.start("LevelScore", { level: this.level })
-      // })
+      this.time.delayedCall(3000, () => {
+        this.scene.start("LevelScore", { level: this.level })
+      })
     })
 
     this.scene.launch("SummonHud")
