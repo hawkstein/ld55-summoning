@@ -53,6 +53,7 @@ export class Preloader extends Scene {
       "PressStart2P_Red_20.png",
       "PressStart2P_Red_20.xml"
     )
+    this.load.image("nonogram-tileset", "nonogram-tileset.png")
   }
 
   create() {
