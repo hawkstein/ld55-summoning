@@ -4,6 +4,7 @@ import { setStoredSceneKey } from "./storeSceneKey"
 
 import { Creator } from "../../nonogram/src/index"
 import TextButton from "../lib/TextButton"
+import { TEAL_16 } from "../lib/BitmapFontKey"
 
 const levels = [
   {
@@ -85,12 +86,7 @@ export class Game extends Scene {
       row.forEach((num, j) => {
         const pos = row.length - j
         this.add
-          .bitmapText(
-            xPos - pos * 16,
-            104 + i * 16,
-            "PressStart2P_Teal_16",
-            num.toString()
-          )
+          .bitmapText(xPos - pos * 16, 104 + i * 16, TEAL_16, num.toString())
           .setScale(0.5)
       })
     })
@@ -102,7 +98,7 @@ export class Game extends Scene {
           .bitmapText(
             xPos + 4 + i * 16,
             100 - pos * 16,
-            "PressStart2P_Teal_16",
+            TEAL_16,
             num.toString()
           )
           .setScale(0.5)
@@ -144,9 +140,7 @@ export class Game extends Scene {
         // Evaluate the grid
         let mistakes = 0
         this.grid.forEach((row, i) => {
-          console.log(row)
           row.forEach((cell, j) => {
-            console.log(cell)
             const tile = map.getTileAt(j, i)
             if (tile) {
               const value = tile.index === 1 ? 1 : 0
@@ -156,11 +150,14 @@ export class Game extends Scene {
             }
           })
         })
+        mistakes = mistakes / puzzle.totalCells
 
         this.scene.pause("Game")
         this.scene.setVisible(true, "SummonHud")
         this.scene.setActive(true, "SummonHud")
-        this.scene.get("SummonHud").events.emit("check", { mistakes })
+        this.scene
+          .get("SummonHud")
+          .events.emit("check", { level: this.level, mistakes })
       }
     )
   }
