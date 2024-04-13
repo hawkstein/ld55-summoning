@@ -11,8 +11,19 @@ import { SummonHud } from "./scenes/SummonHud"
 
 import { Game, Types } from "phaser"
 
-//  Find out more information about the Game Config at:
-//  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
+export class Summons extends Phaser.Plugins.BasePlugin {
+  humans: number = 0
+  constructor(pluginManager: Phaser.Plugins.PluginManager) {
+    super(pluginManager)
+  }
+  getHumans() {
+    return this.humans
+  }
+  addHuman(amount: number) {
+    this.humans += amount
+  }
+}
+
 const config: Types.Core.GameConfig = {
   width: 150,
   height: 300,
@@ -43,6 +54,11 @@ const config: Types.Core.GameConfig = {
       gravity: { x: 0, y: 0 },
       debug: false,
     },
+  },
+  plugins: {
+    global: [
+      { key: "Summons", plugin: Summons, start: false, mapping: "summons" },
+    ],
   },
   dom: {
     createContainer: true,

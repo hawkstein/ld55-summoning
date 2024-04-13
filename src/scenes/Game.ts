@@ -5,6 +5,7 @@ import { setStoredSceneKey } from "./storeSceneKey"
 import { Creator } from "../../nonogram/src/index"
 import TextButton from "../lib/TextButton"
 import { TEAL_16 } from "../lib/BitmapFontKey"
+import { Summons } from "../main"
 
 const levels = [
   {
@@ -123,28 +124,7 @@ export class Game extends Scene {
       }
     })
 
-    this.events.on("summoned", ({ humans }: { humans: number }) => {
-      this.state = "summoned"
-      this.input.off("pointerup")
-      this.summonButton.destroy()
-      if (this.enemies.getLength() === 0) {
-        this.time.delayedCall(3000, () => {
-          this.scene.start("LevelScore", { level: this.level })
-        })
-      }
-      const circle = new Phaser.Geom.Circle(
-        this.camera.centerX,
-        this.summonButton.y - 40,
-        16
-      )
-      const humansList = []
-      for (let i = 0; i < humans; i++) {
-        const x = Phaser.Math.Between(0, this.camera.width)
-        const y = Phaser.Math.Between(0, 20)
-        humansList.push(this.add.human(x, y))
-        Phaser.Actions.PlaceOnCircle(humansList, circle, 1, 4)
-      }
-    })
+    this.events.on("summoned", this.handleSummoned, this)
 
     this.scene.launch("SummonHud")
     this.scene.get("SummonHud").events.on("start", () => {
@@ -207,6 +187,40 @@ export class Game extends Scene {
       const x = Phaser.Math.Between(0, this.camera.width)
       const y = Phaser.Math.Between(0, 20)
       this.enemies.add(this.add.enemy(x, y))
+    }
+    const summons = this.plugins.get("Summons") as Summons | null
+    const previousHumans = summons?.getHumans()
+    console.log({ previousHumans })
+    this.addHumans(previousHumans || 0)
+  }
+
+  handleSummoned({ humans }: { humans: number }) {
+    this.state = "summoned"
+    this.input.off("pointerup")
+    this.summonButton.destroy()
+    if (this.enemies.getLength() === 0) {
+      this.time.delayedCall(3000, () => {
+        this.scene.start("LevelScore", { level: this.level })
+      })
+    }
+    this.addHumans(humans)
+
+    const summons = this.plugins.get("Summons") as Summons | null
+    summons?.addHuman(3)
+  }
+
+  addHumans(amount: number) {
+    const circle = new Phaser.Geom.Circle(
+      this.camera.centerX,
+      this.summonButton.y - 40,
+      36
+    )
+    const humansList = []
+    for (let i = 0; i < amount; i++) {
+      const x = Phaser.Math.Between(0, this.camera.width)
+      const y = Phaser.Math.Between(0, 20)
+      humansList.push(this.add.human(x, y))
+      Phaser.Actions.PlaceOnCircle(humansList, circle, 4, 6)
     }
   }
 }
