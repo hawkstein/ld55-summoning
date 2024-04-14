@@ -1,0 +1,1 @@
+export const SCENE_TRANSITION_DURATION = 500

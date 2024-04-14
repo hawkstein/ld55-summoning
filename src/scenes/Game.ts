@@ -6,7 +6,7 @@ import { Creator } from "../../nonogram/src/index"
 import TextButton from "../lib/TextButton"
 import { TEAL_16 } from "../lib/BitmapFontKey"
 import { levels } from "../game/levels"
-import { Summons, getSummonsPlugin } from "../plugins/Summons"
+import { getSummonsPlugin } from "../plugins/Summons"
 
 export class Game extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera
@@ -112,7 +112,6 @@ export class Game extends Scene {
             }
           })
         })
-        mistakes = mistakes / puzzle.totalCells
 
         this.scene.pause("Game")
         this.scene.setVisible(true, "SummonHud")
@@ -150,8 +149,8 @@ export class Game extends Scene {
       const y = Phaser.Math.Between(0, 20)
       this.enemies.add(this.add.enemy(x, y))
     }
-    const summons = this.plugins.get("Summons") as Summons | null
-    const previousHumans = summons?.getHumans()
+    const summons = getSummonsPlugin(this.plugins)
+    const previousHumans = summons.getHumans()
     this.addHumans(previousHumans || 0)
   }
 
