@@ -1,0 +1,11 @@
+[[redirects]]
+    from = '/highscore/'
+    to = '/.netlify/functions/highscore/'
+    status = 200
+
+[functions]
+    node_bundler = 'esbuild'
+
+[dev]
+  targetPort = 8080
+  port = 8888
