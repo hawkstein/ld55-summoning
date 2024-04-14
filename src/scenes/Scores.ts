@@ -19,7 +19,7 @@ export class Scores extends Scene {
     const centerX = this.cameras.main.centerX
     this.add.bitmapText(centerX, 16, RED_20, "Scores").setOrigin(0.5)
     const scores = getScorePlugin(this.plugins)
-    const latestScore = scores.getLatestScore() || 200
+    const latestScore = scores.getLatestScore()
     if (latestScore) {
       const timeTaken = Math.ceil(scores.getRunTime() / 1000)
       const mins = Math.floor(timeTaken / 60)
