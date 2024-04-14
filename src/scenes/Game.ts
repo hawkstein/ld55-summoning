@@ -20,6 +20,11 @@ export class Game extends Scene {
   summonButton: TextButton
   enemies: Phaser.GameObjects.Group
   humans: Human[] = []
+  gridSize: { rows: number; columns: number; density: number }
+  rowHints: number[][]
+  columnHints: number[][]
+  totalCells: number = 0
+  map: Phaser.Tilemaps.Tilemap
 
   constructor() {
     super("Game")
@@ -28,6 +33,19 @@ export class Game extends Scene {
   init(data: { level: number }) {
     this.level = data.level
     this.state = "summoning"
+
+    this.gridSize = levels[this.level].gridSize
+    const creator = new Creator()
+    const puzzle = creator.createRandom(
+      this.gridSize.rows,
+      this.gridSize.columns,
+      this.gridSize.density
+    )
+
+    this.grid = puzzle.grid as number[][]
+    this.rowHints = puzzle.rowHints as number[][]
+    this.columnHints = puzzle.columnHints as number[][]
+    this.totalCells = puzzle.totalCells
   }
 
   create() {
@@ -35,33 +53,24 @@ export class Game extends Scene {
 
     this.camera = this.cameras.main
     this.camera.setBackgroundColor(PaletteNum.HotPanda.DarkBlue)
-    const gridSize = levels[this.level].gridSize
-    const creator = new Creator()
-    const puzzle = creator.createRandom(
-      gridSize.rows,
-      gridSize.columns,
-      gridSize.density
-    )
 
-    this.grid = puzzle.grid as number[][]
-    const rowHints = puzzle.rowHints as number[][]
-    const columnHints = puzzle.columnHints as number[][]
-
-    const map = this.make.tilemap({
-      data: new Array(gridSize.rows).fill(new Array(gridSize.columns).fill(0)),
+    this.map = this.make.tilemap({
+      data: new Array(this.gridSize.rows).fill(
+        new Array(this.gridSize.columns).fill(0)
+      ),
       tileWidth: 16,
       tileHeight: 16,
     })
-    const tiles = map.addTilesetImage("nonogram-tileset")
+    const tiles = this.map.addTilesetImage("nonogram-tileset")
     let xPos = 0
     if (tiles) {
-      const layer = map.createLayer(0, tiles, 0, 100)
+      const layer = this.map.createLayer(0, tiles, 0, 100)
       if (layer) {
         xPos = layer.x = this.camera.centerX - layer.width / 2
       }
     }
 
-    rowHints.forEach((row, i) => {
+    this.rowHints.forEach((row, i) => {
       row.forEach((num, j) => {
         const pos = row.length - j
         this.add
@@ -70,7 +79,7 @@ export class Game extends Scene {
       })
     })
 
-    columnHints.forEach((column, i) => {
+    this.columnHints.forEach((column, i) => {
       column.forEach((num, j) => {
         const pos = column.length - j
         this.add
@@ -84,13 +93,15 @@ export class Game extends Scene {
       })
     })
 
-    this.input.on("pointerup", (pointer: Phaser.Input.Pointer) => {
-      const tile = map.getTileAtWorldXY(pointer.worldX, pointer.worldY)
-      if (tile) {
-        let updatedIndex = tile.index + 1
-        tile.index = updatedIndex > 2 ? 0 : updatedIndex
-      }
-    })
+    if (this.input.listeners("pointerup").length === 0) {
+      this.input.on("pointerup", (pointer: Phaser.Input.Pointer) => {
+        const tile = this.map.getTileAtWorldXY(pointer.worldX, pointer.worldY)
+        if (tile) {
+          let updatedIndex = tile.index + 1
+          tile.index = updatedIndex > 2 ? 0 : updatedIndex
+        }
+      })
+    }
 
     if (this.events.listeners("summoned").length === 0) {
       this.events.on("summoned", this.handleSummoned, this)
@@ -111,28 +122,7 @@ export class Game extends Scene {
       270,
       "Summon",
       () => {
-        // Evaluate the grid
-        let mistakes = 0
-        this.grid.forEach((row, i) => {
-          row.forEach((cell, j) => {
-            const tile = map.getTileAt(j, i)
-            if (tile) {
-              const value = tile.index === 1 ? 1 : 0
-              if (tile && cell !== value) {
-                mistakes++
-              }
-            }
-          })
-        })
-
-        this.scene.setVisible(true, "SummonHud")
-        this.scene.setActive(true, "SummonHud")
-        this.scene.get("SummonHud").events.emit("check", {
-          level: this.level,
-          mistakes,
-          totalCells: puzzle.totalCells,
-        })
-        this.scene.pause("Game")
+        this.checkGridAndSummon()
       }
     )
 
@@ -167,6 +157,30 @@ export class Game extends Scene {
     const previousHumans = summons.getHumans()
     console.log({ previousHumans })
     this.addHumans(previousHumans || 0)
+  }
+
+  checkGridAndSummon() {
+    let mistakes = 0
+    this.grid.forEach((row, i) => {
+      row.forEach((cell, j) => {
+        const tile = this.map.getTileAt(j, i)
+        if (tile) {
+          const value = tile.index === 1 ? 1 : 0
+          if (tile && cell !== value) {
+            mistakes++
+          }
+        }
+      })
+    })
+
+    this.scene.setVisible(true, SummonHud.KEY)
+    this.scene.setActive(true, SummonHud.KEY)
+    this.scene.get(SummonHud.KEY).events.emit("check", {
+      level: this.level,
+      mistakes,
+      totalCells: this.totalCells,
+    })
+    this.scene.pause("Game")
   }
 
   handleSummoned({ humans }: { humans: number }) {
