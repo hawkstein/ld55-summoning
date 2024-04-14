@@ -152,7 +152,6 @@ export class Game extends Scene {
     }
     const summons = this.plugins.get("Summons") as Summons | null
     const previousHumans = summons?.getHumans()
-    console.log({ previousHumans })
     this.addHumans(previousHumans || 0)
   }
 
