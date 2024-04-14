@@ -5,15 +5,16 @@ import { RED_20 } from "../lib/BitmapFontKey"
 import TextButton from "../lib/TextButton"
 
 export class MainMenu extends Scene {
+  public static readonly KEY = "MainMenu"
   title: GameObjects.BitmapText
   fullscreen: boolean = false
 
   constructor() {
-    super("MainMenu")
+    super(MainMenu.KEY)
   }
 
   create() {
-    setStoredSceneKey("MainMenu")
+    setStoredSceneKey(MainMenu.KEY)
     const camera = this.cameras.main
     camera.setBackgroundColor(PaletteNum.HotPanda.Orange)
 
