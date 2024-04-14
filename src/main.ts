@@ -66,8 +66,13 @@ Phaser.GameObjects.GameObjectFactory.register(
 
 Phaser.GameObjects.GameObjectFactory.register(
   "human",
-  function (this: Phaser.GameObjects.GameObjectFactory, x: number, y: number) {
-    const human = new Human(this.scene, x, y)
+  function (
+    this: Phaser.GameObjects.GameObjectFactory,
+    x: number,
+    y: number,
+    enemies: Phaser.GameObjects.Group
+  ) {
+    const human = new Human(this.scene, x, y, enemies)
     this.displayList.add(human)
     this.updateList.add(human)
     return human

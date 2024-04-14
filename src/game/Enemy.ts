@@ -9,11 +9,6 @@ export class Enemy extends Physics.Arcade.Sprite {
     // this.setCollideWorldBounds()
     this.setVelocityY(4)
   }
-
-  update() {
-    super.update()
-  }
-  changeColor() {}
 }
 
 declare global {

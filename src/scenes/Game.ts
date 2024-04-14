@@ -182,7 +182,7 @@ export class Game extends Scene {
     for (let i = 0; i < amount; i++) {
       const x = Phaser.Math.Between(0, this.camera.width)
       const y = Phaser.Math.Between(0, 20)
-      humansList.push(this.add.human(x, y))
+      humansList.push(this.add.human(x, y, this.enemies))
       Phaser.Actions.PlaceOnCircle(humansList, circle, 4, 6)
     }
   }
