@@ -2,7 +2,7 @@ import { Scene } from "phaser"
 import { PaletteNum } from "../lib/Palette"
 import { setStoredSceneKey } from "./storeSceneKey"
 import TextButton from "../lib/TextButton"
-import { PURPLE_18 } from "../lib/BitmapFontKey"
+import { TEAL_16 } from "../lib/BitmapFontKey"
 import { getScorePlugin } from "../plugins/Score"
 
 export class LevelScore extends Scene {
@@ -20,14 +20,13 @@ export class LevelScore extends Scene {
   create() {
     setStoredSceneKey("LevelScore")
     this.camera = this.cameras.main
-    this.camera.setBackgroundColor(PaletteNum.HotPanda.Red)
+    this.camera.setBackgroundColor(PaletteNum.HotPanda.DarkBlue)
 
     const score = getScorePlugin(this.plugins).currentScore
-    console.log({ score })
     this.add
-      .bitmapText(this.camera.centerX, 80, PURPLE_18, `Score: ${score}`)
+      .bitmapText(this.camera.centerX, 80, TEAL_16, `Score\n${score}`)
+      .setLineSpacing(20)
       .setOrigin(0.5)
-      .setScale(0.5)
 
     new TextButton(
       this,

@@ -28,6 +28,17 @@ export default class TextButton extends Phaser.GameObjects.Container {
         font: RED_20,
       })
       .setOrigin(0.5)
+      .setCenterAlign()
+
+    const outline = scene.add
+      .rectangle(
+        0,
+        0,
+        this.text.width + 24,
+        this.text.height + 14,
+        PaletteNum.HotPanda.Red
+      )
+      .setOrigin(0.5)
 
     this.background = scene.add
       .rectangle(
@@ -44,6 +55,7 @@ export default class TextButton extends Phaser.GameObjects.Container {
       useHandCursor: true,
     })
 
+    this.add(outline)
     this.add(this.background)
     this.add(this.text)
 
@@ -54,7 +66,7 @@ export default class TextButton extends Phaser.GameObjects.Container {
 
   private onButtonOver() {
     this.background.fillColor = PaletteNum.HotPanda.Red
-    this.text.setTintFill(PaletteNum.HotPanda.DarkBlue)
+    this.text.setTintFill(PaletteNum.HotPanda.Orange)
   }
 
   private onButtonOut() {
