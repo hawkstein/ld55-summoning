@@ -38,8 +38,8 @@ export class Game extends Scene {
     this.gridSize = levels[this.level].gridSize
     const creator = new Creator()
     const puzzle = creator.createRandom(
-      this.gridSize.rows,
       this.gridSize.columns,
+      this.gridSize.rows,
       this.gridSize.density
     )
 
