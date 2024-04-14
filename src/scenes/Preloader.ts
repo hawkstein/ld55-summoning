@@ -1,7 +1,7 @@
 import { Scene } from "phaser"
 import { getStoredSceneKey } from "./storeSceneKey"
 import { PaletteNum, PaletteRGB } from "../lib/Palette"
-import { TEAL_16, RED_20 } from "../lib/BitmapFontKey"
+import { TEAL_16, RED_20, PURPLE_18 } from "../lib/BitmapFontKey"
 
 const DEV_MODE = import.meta.env.MODE === "development"
 const LOAD_STORED_SCENE =
@@ -53,6 +53,11 @@ export class Preloader extends Scene {
       RED_20,
       "PressStart2P_Red_20.png",
       "PressStart2P_Red_20.xml"
+    )
+    this.load.bitmapFont(
+      PURPLE_18,
+      "PressStart2P_Purple_18.png",
+      "PressStart2P_Purple_18.xml"
     )
     this.load.image("nonogram-tileset", "nonogram-tileset.png")
   }

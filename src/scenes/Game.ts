@@ -1,5 +1,5 @@
 import { Scene } from "phaser"
-import { PaletteNum } from "../lib/Palette"
+import { PaletteNum, PaletteRGB } from "../lib/Palette"
 import { setStoredSceneKey } from "./storeSceneKey"
 
 import { Creator } from "../../nonogram/src/index"
@@ -11,6 +11,7 @@ import { SummonHud } from "./SummonHud"
 import { Human } from "../game/Human"
 import { Enemy } from "../game/Enemy"
 import { Success } from "./Success"
+import { getScorePlugin } from "../plugins/Score"
 
 export class Game extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera
@@ -207,6 +208,10 @@ export class Game extends Scene {
       mistakes,
       totalCells: this.totalCells,
     })
+    if (mistakes === 0) {
+      const scorePlugin = getScorePlugin(this.plugins)
+      scorePlugin.increase(100 * (this.level + 1))
+    }
     this.scene.pause("Game")
   }
 
@@ -256,6 +261,8 @@ export class Game extends Scene {
           | Phaser.Types.Physics.Arcade.GameObjectWithBody
           | Phaser.Tilemaps.Tile
       ) => {
+        const scorePlugin = getScorePlugin(this.plugins)
+        scorePlugin.increase(100)
         objectOne.destroy()
         objectTwo.destroy()
         if (this.enemies.countActive() === 0 && this.state === "summoned") {
@@ -270,9 +277,19 @@ export class Game extends Scene {
       const nextLevel = this.level + 1
       const hasCompletedAllLevels = nextLevel >= 8
       if (hasCompletedAllLevels) {
+        const scorePlugin = getScorePlugin(this.plugins)
+        scorePlugin.stopRun()
         this.scene.start(Success.KEY)
       } else {
-        this.scene.start("LevelScore", { level: this.level })
+        this.camera.once("camerafadeoutcomplete", () => {
+          this.scene.start("LevelScore", { level: this.level })
+        })
+        this.camera.fadeOut(
+          500,
+          PaletteRGB.HotPanda.DarkBlue.r,
+          PaletteRGB.HotPanda.DarkBlue.g,
+          PaletteRGB.HotPanda.DarkBlue.b
+        )
       }
     })
   }

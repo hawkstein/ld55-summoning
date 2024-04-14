@@ -2,6 +2,7 @@ import { Enemy } from "./game/Enemy"
 import { Human } from "./game/Human"
 import { MagicMissile } from "./game/MagicMissile"
 import { PaletteHash } from "./lib/Palette"
+import { Score } from "./plugins/Score"
 import { Summons } from "./plugins/Summons"
 import { Boot } from "./scenes/Boot"
 import { Game as MainGame } from "./scenes/Game"
@@ -46,7 +47,10 @@ const config: Types.Core.GameConfig = {
     },
   },
   plugins: {
-    global: [{ key: Summons.PLUGIN_KEY, plugin: Summons, start: false }],
+    global: [
+      { key: Summons.PLUGIN_KEY, plugin: Summons, start: false },
+      { key: Score.KEY, plugin: Score, start: false },
+    ],
   },
   dom: {
     createContainer: true,

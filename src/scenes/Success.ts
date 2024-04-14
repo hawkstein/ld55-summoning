@@ -17,14 +17,19 @@ export class Success extends Scene {
     setStoredSceneKey(Success.KEY)
     this.cameras.main.setBackgroundColor(PaletteNum.HotPanda.DarkBlue)
     const centerX = this.cameras.main.centerX
-    this.add.bitmapText(centerX, 100, RED_20, "Well done!").setOrigin(0.5)
+    this.add
+      .bitmapText(centerX, 100, RED_20, "Well done!")
+      .setOrigin(0.5)
+      .setScale(0.5)
     const scores = getScorePlugin(this.plugins)
     const latestScore = scores.getCurrentScore()
     this.add
-      .bitmapText(centerX, 180, RED_20, `Score\n${latestScore}`)
+      .bitmapText(centerX, 180, RED_20, `Score\n\n${latestScore}`)
       .setOrigin(0.5)
-    new TextButton(this, centerX, 280, "Back to Main Menu", () => {
+      .setCenterAlign()
+      .setScale(0.5)
+    new TextButton(this, centerX, 280, "Main Menu", () => {
       this.scene.start(MainMenu.KEY)
-    })
+    }).setScale(0.5)
   }
 }

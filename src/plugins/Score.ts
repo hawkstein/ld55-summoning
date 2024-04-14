@@ -11,12 +11,14 @@ export class Score extends Phaser.Plugins.BasePlugin {
   getCurrentScore() {
     return this.currentScore
   }
-  increase(amount: number) {
-    this.currentScore += amount
+
+  getLatestScore() {
+    return this.recentScores[this.recentScores.length - 1]
   }
-  finishScoring() {
-    this.recentScores.push(this.currentScore)
-    this.currentScore = 0
+
+  increase(amount: number) {
+    console.log("score:", amount)
+    this.currentScore += amount
   }
 
   startRun() {
@@ -26,6 +28,8 @@ export class Score extends Phaser.Plugins.BasePlugin {
 
   stopRun() {
     this.endTimestamp = Date.now()
+    this.recentScores.push(this.currentScore)
+    this.currentScore = 0
   }
 
   getRunTime() {

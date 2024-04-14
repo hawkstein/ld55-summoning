@@ -1,6 +1,6 @@
 export const levels = [
   {
-    gridSize: { rows: 4, columns: 4, density: 0.5 },
+    gridSize: { rows: 4, columns: 7, density: 0.5 },
     waves: [{ enemies: 0 }],
     reward: { mana: 2, threshold: 0.6 },
   },

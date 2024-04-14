@@ -3,6 +3,7 @@ import { PaletteNum } from "../lib/Palette"
 import { setStoredSceneKey } from "./storeSceneKey"
 import { RED_20 } from "../lib/BitmapFontKey"
 import TextButton from "../lib/TextButton"
+import { getScorePlugin } from "../plugins/Score"
 
 export class MainMenu extends Scene {
   public static readonly KEY = "MainMenu"
@@ -24,6 +25,8 @@ export class MainMenu extends Scene {
       .setLineSpacing(10)
       .setOrigin(0.5)
 
+    const scorePlugin = getScorePlugin(this.plugins)
+
     const menu = [
       this.title,
       new TextButton(this, camera.centerX, 0, "Start", () => {
@@ -31,6 +34,7 @@ export class MainMenu extends Scene {
           this.scale.startFullscreen()
         }
         this.scene.start("Game", { level: 0 })
+        scorePlugin.startRun()
       }),
 
       new TextButton(this, camera.centerX, 0, "Options", () => {
