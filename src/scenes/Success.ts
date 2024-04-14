@@ -22,7 +22,7 @@ export class Success extends Scene {
       .setOrigin(0.5)
       .setScale(0.5)
     const scores = getScorePlugin(this.plugins)
-    const latestScore = scores.getCurrentScore()
+    const latestScore = scores.getLatestScore()
     this.add
       .bitmapText(centerX, 180, RED_20, `Score\n\n${latestScore}`)
       .setOrigin(0.5)
