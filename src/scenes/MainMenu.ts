@@ -16,7 +16,7 @@ export class MainMenu extends Scene {
   create() {
     setStoredSceneKey(MainMenu.KEY)
     const camera = this.cameras.main
-    camera.setBackgroundColor(PaletteNum.HotPanda.Orange)
+    camera.setBackgroundColor(PaletteNum.HotPanda.DarkBlue)
 
     this.title = this.add
       .bitmapText(camera.centerX, 80, RED_20, "LD55")

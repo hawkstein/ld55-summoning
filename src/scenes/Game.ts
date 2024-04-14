@@ -54,44 +54,7 @@ export class Game extends Scene {
     this.camera = this.cameras.main
     this.camera.setBackgroundColor(PaletteNum.HotPanda.DarkBlue)
 
-    this.map = this.make.tilemap({
-      data: new Array(this.gridSize.rows).fill(
-        new Array(this.gridSize.columns).fill(0)
-      ),
-      tileWidth: 16,
-      tileHeight: 16,
-    })
-    const tiles = this.map.addTilesetImage("nonogram-tileset")
-    let xPos = 0
-    if (tiles) {
-      const layer = this.map.createLayer(0, tiles, 0, 100)
-      if (layer) {
-        xPos = layer.x = this.camera.centerX - layer.width / 2
-      }
-    }
-
-    this.rowHints.forEach((row, i) => {
-      row.forEach((num, j) => {
-        const pos = row.length - j
-        this.add
-          .bitmapText(xPos - pos * 16, 104 + i * 16, TEAL_16, num.toString())
-          .setScale(0.5)
-      })
-    })
-
-    this.columnHints.forEach((column, i) => {
-      column.forEach((num, j) => {
-        const pos = column.length - j
-        this.add
-          .bitmapText(
-            xPos + 4 + i * 16,
-            100 - pos * 16,
-            TEAL_16,
-            num.toString()
-          )
-          .setScale(0.5)
-      })
-    })
+    this.createGrid()
 
     if (this.input.listeners("pointerup").length === 0) {
       this.input.on("pointerup", (pointer: Phaser.Input.Pointer) => {
@@ -119,7 +82,7 @@ export class Game extends Scene {
     this.summonButton = new TextButton(
       this,
       this.camera.centerX,
-      270,
+      300,
       "Summon",
       () => {
         this.checkGridAndSummon()
@@ -157,6 +120,70 @@ export class Game extends Scene {
     const previousHumans = summons.getHumans()
     console.log({ previousHumans })
     this.addHumans(previousHumans || 0)
+  }
+
+  createGrid() {
+    this.map = this.make.tilemap({
+      data: new Array(this.gridSize.rows).fill(
+        new Array(this.gridSize.columns).fill(0)
+      ),
+      tileWidth: 16,
+      tileHeight: 16,
+    })
+    const rowHintSize = this.rowHints.reduce(
+      (acc, row) => Math.max(acc, row.length),
+      0
+    )
+    const columnHintSize = this.columnHints.reduce(
+      (acc, column) => Math.max(acc, column.length),
+      0
+    )
+    const rowHintPadding = 16 - 2 * rowHintSize
+    const columnHintPadding = 16 - 2 * columnHintSize
+
+    const rowHintWidth = rowHintSize * rowHintPadding
+    const columnHintHeight = columnHintSize * columnHintPadding
+
+    const tiles = this.map.addTilesetImage("nonogram-tileset")
+    if (!tiles) {
+      throw "No tiles found!"
+    }
+    const layer = this.map.createLayer(0, tiles, 0, 0)
+    if (!layer) {
+      throw "Could not create layer!"
+    }
+    const xPos = (layer.x =
+      this.camera.centerX + rowHintWidth / 2 - layer.width / 2)
+    const yPos = (layer.y =
+      this.camera.centerY - 20 + columnHintHeight / 2 - layer.height / 2)
+
+    this.rowHints.forEach((row, i) => {
+      row.forEach((num, j) => {
+        const pos = row.length - j
+        this.add
+          .bitmapText(
+            xPos - pos * rowHintPadding,
+            yPos + 4 + i * 16,
+            TEAL_16,
+            num.toString()
+          )
+          .setScale(0.5)
+      })
+    })
+
+    this.columnHints.forEach((column, i) => {
+      column.forEach((num, j) => {
+        const pos = column.length - j
+        this.add
+          .bitmapText(
+            xPos + 4 + i * 16,
+            yPos - pos * columnHintPadding,
+            TEAL_16,
+            num.toString()
+          )
+          .setScale(0.5)
+      })
+    })
   }
 
   checkGridAndSummon() {

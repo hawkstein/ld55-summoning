@@ -14,23 +14,23 @@ import { SummonHud } from "./scenes/SummonHud"
 import { Game, Types } from "phaser"
 
 const config: Types.Core.GameConfig = {
-  width: 150,
-  height: 300,
+  width: 200,
+  height: 320,
   type: Phaser.AUTO,
   parent: "game-container",
   backgroundColor: PaletteHash.HotPanda.Background,
   scale: {
     min: {
-      width: 150,
-      height: 300,
+      width: 200,
+      height: 320,
     },
     max: {
       width: 800,
-      height: 1200,
+      height: 1280,
     },
     snap: {
-      width: 150,
-      height: 300,
+      width: 200,
+      height: 320,
     },
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
