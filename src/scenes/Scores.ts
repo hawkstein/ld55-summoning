@@ -37,18 +37,22 @@ export class Scores extends Scene {
         .setScale(0.5)
     }
 
+    new TextButton(this, centerX, 300, "Menu", () => {
+      this.scene.start(MainMenu.KEY)
+    }).setScale(0.5)
+
     try {
       const response = await fetch("/highscore/")
       const data: {
-        highscores: { name: string; score: number; time: number }[]
+        highscores: { name: string; score: number; seconds: number }[]
       } = await response.json()
 
       const highscores = data.highscores
 
       for (let i = 0; i < highscores.length; i++) {
-        const { name, score, time = 0 } = highscores[i]
-        const mins = Math.floor(time / 60)
-        const secs = time % 60
+        const { name, score, seconds = 0 } = highscores[i]
+        const mins = Math.floor(seconds / 60)
+        const secs = seconds % 60
         this.add
           .bitmapText(
             centerX - 70,
@@ -62,9 +66,5 @@ export class Scores extends Scene {
     } catch (err) {
       console.error("Error fetching highscores", err)
     }
-
-    new TextButton(this, centerX, 300, "Menu", () => {
-      this.scene.start(MainMenu.KEY)
-    }).setScale(0.5)
   }
 }
