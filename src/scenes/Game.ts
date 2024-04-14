@@ -116,9 +116,11 @@ export class Game extends Scene {
 
         this.scene.setVisible(true, "SummonHud")
         this.scene.setActive(true, "SummonHud")
-        this.scene
-          .get("SummonHud")
-          .events.emit("check", { level: this.level, mistakes })
+        this.scene.get("SummonHud").events.emit("check", {
+          level: this.level,
+          mistakes,
+          totalCells: puzzle.totalCells,
+        })
         this.scene.pause("Game")
       }
     )
@@ -167,7 +169,7 @@ export class Game extends Scene {
     this.addHumans(humans)
 
     const summons = getSummonsPlugin(this.plugins)
-    summons.addHuman(3)
+    summons.addHuman(humans)
   }
 
   addHumans(amount: number) {

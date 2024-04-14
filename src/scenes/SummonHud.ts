@@ -4,6 +4,7 @@ import TextButton from "../lib/TextButton"
 import { RED_20, TEAL_16 } from "../lib/BitmapFontKey"
 import { SCENE_TRANSITION_DURATION } from "../lib/Animations"
 import PurchaseButton from "../game/PurchaseButton"
+import { levels } from "../game/levels"
 
 export class SummonHud extends Scene {
   public static readonly KEY = "SummonHud"
@@ -13,6 +14,7 @@ export class SummonHud extends Scene {
   mana: number = 0
   resumeButton: TextButton
   purchaseCount: Phaser.GameObjects.BitmapText
+  manaCount: Phaser.GameObjects.BitmapText
 
   constructor() {
     super({ key: SummonHud.KEY, visible: false, active: false })
@@ -78,25 +80,45 @@ export class SummonHud extends Scene {
       .setOrigin(0.5)
       .setScale(0.5)
 
+    this.manaCount = this.add
+      .bitmapText(this.camera.centerX, 150, TEAL_16, "Mana: 0")
+      .setOrigin(0.5)
+      .setScale(0.5)
+
     this.events.on(
       "check",
-      ({ level, mistakes }: { level: number; mistakes: number }) => {
+      ({
+        level,
+        mistakes,
+        totalCells,
+      }: {
+        level: number
+        mistakes: number
+        totalCells: number
+      }) => {
         this.resumeButton.setActive(true).setVisible(true)
-        this.summonHumans(level, mistakes)
+        this.summonHumans(level, mistakes, totalCells)
       }
     )
   }
 
-  summonHumans(level: number, mistakes: number) {
+  summonHumans(level: number, mistakes: number, totalCells: number) {
     this.camera.fadeIn(
       SCENE_TRANSITION_DURATION,
       PaletteRGB.HotPanda.DarkBlue.r,
       PaletteRGB.HotPanda.DarkBlue.g,
       PaletteRGB.HotPanda.DarkBlue.b
     )
+    console.log("summonHumans", level, mistakes, totalCells)
+    console.log("ratio", mistakes / totalCells, levels[level].reward.threshold)
+    const success = mistakes / totalCells < levels[level].reward.threshold
+    const manaGain = success
+      ? levels[level].reward.mana
+      : Math.floor(levels[level].reward.mana / 2)
     this.scene.setVisible(true, SummonHud.KEY)
-    this.message.setText(`Level ${level + 1}\n\n${mistakes} mistakes`)
-    this.mana = 3
+    this.message.setText(`${mistakes} mistakes\n\nMana +${manaGain}`)
+    this.mana = manaGain
+    this.manaCount.setText(`Mana: ${this.mana}`)
   }
 
   makePurchase() {
@@ -104,6 +126,7 @@ export class SummonHud extends Scene {
       this.purchases++
       this.mana -= 1
       this.purchaseCount.setText(this.purchases.toString())
+      this.manaCount.setText(`Mana: ${this.mana}`)
     }
   }
 

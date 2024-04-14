@@ -1,5 +1,6 @@
 export class Summons extends Phaser.Plugins.BasePlugin {
   static readonly PLUGIN_KEY: string = "Summons"
+  private static id: number = 0
   humans: number = 0
   constructor(pluginManager: Phaser.Plugins.PluginManager) {
     super(pluginManager)
@@ -9,6 +10,9 @@ export class Summons extends Phaser.Plugins.BasePlugin {
   }
   addHuman(amount: number) {
     this.humans += amount
+  }
+  static getId() {
+    return Summons.id++
   }
 }
 
