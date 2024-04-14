@@ -20,6 +20,12 @@ export class MainMenu extends Scene {
     camera.setBackgroundColor(PaletteNum.HotPanda.DarkBlue)
 
     this.title = this.add
+      .bitmapText(camera.centerX, 80, RED_20, "Summoning\nGrid")
+      .setCenterAlign()
+      .setLineSpacing(10)
+      .setOrigin(0.5)
+
+    const ld55 = this.add
       .bitmapText(camera.centerX, 80, RED_20, "LD55")
       .setCenterAlign()
       .setLineSpacing(10)
@@ -29,6 +35,7 @@ export class MainMenu extends Scene {
 
     const menu = [
       this.title,
+      ld55,
       new TextButton(this, camera.centerX, 0, "Start", () => {
         if (this.fullscreen) {
           this.scale.startFullscreen()
@@ -37,9 +44,9 @@ export class MainMenu extends Scene {
         scorePlugin.startRun()
       }),
 
-      new TextButton(this, camera.centerX, 0, "Options", () => {
-        this.scene.start("Options")
-      }),
+      // new TextButton(this, camera.centerX, 0, "Options", () => {
+      //   this.scene.start("Options")
+      // }),
       new TextButton(this, camera.centerX, 0, "Scores", () => {
         this.scene.start("Scores")
       }),
