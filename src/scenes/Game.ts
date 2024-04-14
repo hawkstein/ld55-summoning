@@ -224,7 +224,6 @@ export class Game extends Scene {
   }
 
   addHumans(amount: number) {
-    console.log("add humans", amount)
     const circle = new Phaser.Geom.Circle(
       this.camera.centerX,
       this.summonButton.y - 40,

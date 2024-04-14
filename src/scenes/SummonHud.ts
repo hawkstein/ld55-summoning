@@ -13,6 +13,7 @@ export class SummonHud extends Scene {
   purchases: number = 0
   mana: number = 0
   resumeButton: TextButton
+  purchaseButton: PurchaseButton
   purchaseCount: Phaser.GameObjects.BitmapText
   manaCount: Phaser.GameObjects.BitmapText
 
@@ -41,7 +42,7 @@ export class SummonHud extends Scene {
       .setOrigin(0.5)
       .setScale(0.5)
 
-    new PurchaseButton(
+    this.purchaseButton = new PurchaseButton(
       this,
       this.camera.centerX - 20,
       200,
@@ -51,6 +52,8 @@ export class SummonHud extends Scene {
       },
       "Human.png"
     )
+      .setActive(false)
+      .setVisible(false)
 
     this.resumeButton = new TextButton(
       this,
@@ -97,6 +100,7 @@ export class SummonHud extends Scene {
         totalCells: number
       }) => {
         this.resumeButton.setActive(true).setVisible(true)
+        this.purchaseButton.setActive(true).setVisible(true)
         this.summonHumans(level, mistakes, totalCells)
       }
     )
