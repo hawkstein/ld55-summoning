@@ -113,7 +113,7 @@ export class Game extends Scene {
     this.enemies = this.add.group()
     for (let i = 0; i < numberOfEnemies; i++) {
       const x = Phaser.Math.Between(0, this.camera.width)
-      const y = Phaser.Math.Between(0, 20)
+      const y = Phaser.Math.Between(10, 20)
       this.enemies.add(this.add.enemy(x, y))
     }
     const summons = getSummonsPlugin(this.plugins)
