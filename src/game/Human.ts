@@ -27,9 +27,8 @@ export class Human extends Physics.Arcade.Sprite {
 
   preUpdate(time: number, delta: number) {
     // if enemies are in range, attack
-    if (time - this.lastAttackTime > 2000) {
+    if (time - this.lastAttackTime > 4000) {
       this.lastAttackTime = time
-      this.lastDecisionTime = time
 
       const enemies = this.enemies.getChildren() as Enemy[]
       const enemy = enemies.find(
@@ -40,6 +39,7 @@ export class Human extends Physics.Arcade.Sprite {
         // Attack
         this.gameState = "attacking"
         this.setVelocity(0, 0)
+        this.scene.events.emit("missile", { x: this.x, y: this.y, enemy })
       } else if (this.gameState === "attacking") {
         this.gameState = "idle"
       }

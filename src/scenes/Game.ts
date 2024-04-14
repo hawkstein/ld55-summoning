@@ -8,6 +8,8 @@ import { TEAL_16 } from "../lib/BitmapFontKey"
 import { levels } from "../game/levels"
 import { getSummonsPlugin } from "../plugins/Summons"
 import { SummonHud } from "./SummonHud"
+import { Human } from "../game/Human"
+import { Enemy } from "../game/Enemy"
 
 export class Game extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera
@@ -16,6 +18,7 @@ export class Game extends Scene {
   state: "summoning" | "summoned" = "summoning"
   summonButton: TextButton
   enemies: Phaser.GameObjects.Group
+  humans: Human[] = []
 
   constructor() {
     super("Game")
@@ -23,6 +26,7 @@ export class Game extends Scene {
 
   init(data: { level: number }) {
     this.level = data.level
+    this.state = "summoning"
   }
 
   create() {
@@ -87,7 +91,13 @@ export class Game extends Scene {
       }
     })
 
-    this.events.on("summoned", this.handleSummoned, this)
+    if (this.events.listeners("summoned").length === 0) {
+      this.events.on("summoned", this.handleSummoned, this)
+    }
+
+    if (this.events.listeners("missile").length === 0) {
+      this.events.on("missile", this.handleMagicMissile, this)
+    }
 
     this.scene.launch(SummonHud.KEY)
     this.scene.get(SummonHud.KEY).events.on("start", () => {
@@ -154,6 +164,7 @@ export class Game extends Scene {
     }
     const summons = getSummonsPlugin(this.plugins)
     const previousHumans = summons.getHumans()
+    console.log({ previousHumans })
     this.addHumans(previousHumans || 0)
   }
 
@@ -161,10 +172,8 @@ export class Game extends Scene {
     this.state = "summoned"
     this.input.off("pointerup")
     this.summonButton.destroy()
-    if (this.enemies.getLength() === 0) {
-      this.time.delayedCall(3000, () => {
-        this.scene.start("LevelScore", { level: this.level })
-      })
+    if (this.enemies.countActive() === 0) {
+      this.delayThenNextLevel()
     }
     this.addHumans(humans)
 
@@ -173,6 +182,7 @@ export class Game extends Scene {
   }
 
   addHumans(amount: number) {
+    console.log("add humans", amount)
     const circle = new Phaser.Geom.Circle(
       this.camera.centerX,
       this.summonButton.y - 40,
@@ -185,5 +195,38 @@ export class Game extends Scene {
       humansList.push(this.add.human(x, y, this.enemies))
       Phaser.Actions.PlaceOnCircle(humansList, circle, 4, 6)
     }
+    this.humans = [...humansList]
+  }
+
+  handleMagicMissile({ x, y, enemy }: { x: number; y: number; enemy: Enemy }) {
+    const missile = this.add.missile(x, y)
+    const angle = Phaser.Math.Angle.Between(x, y, enemy.x, enemy.y)
+    const speed = 40
+    missile.setVelocityX(Math.cos(angle) * speed)
+    missile.setVelocityY(Math.sin(angle) * speed)
+    this.physics.add.collider(
+      missile,
+      this.enemies,
+      (
+        objectOne:
+          | Phaser.Types.Physics.Arcade.GameObjectWithBody
+          | Phaser.Tilemaps.Tile,
+        objectTwo:
+          | Phaser.Types.Physics.Arcade.GameObjectWithBody
+          | Phaser.Tilemaps.Tile
+      ) => {
+        objectOne.destroy()
+        objectTwo.destroy()
+        if (this.enemies.countActive() === 0 && this.state === "summoned") {
+          this.delayThenNextLevel()
+        }
+      }
+    )
+  }
+
+  delayThenNextLevel() {
+    this.time.delayedCall(3000, () => {
+      this.scene.start("LevelScore", { level: this.level })
+    })
   }
 }

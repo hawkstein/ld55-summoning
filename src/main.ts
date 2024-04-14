@@ -1,5 +1,6 @@
 import { Enemy } from "./game/Enemy"
 import { Human } from "./game/Human"
+import { MagicMissile } from "./game/MagicMissile"
 import { PaletteHash } from "./lib/Palette"
 import { Summons } from "./plugins/Summons"
 import { Boot } from "./scenes/Boot"
@@ -76,5 +77,15 @@ Phaser.GameObjects.GameObjectFactory.register(
     this.displayList.add(human)
     this.updateList.add(human)
     return human
+  }
+)
+
+Phaser.GameObjects.GameObjectFactory.register(
+  "missile",
+  function (this: Phaser.GameObjects.GameObjectFactory, x: number, y: number) {
+    const missile = new MagicMissile(this.scene, x, y)
+    this.displayList.add(missile)
+    this.updateList.add(missile)
+    return missile
   }
 )
