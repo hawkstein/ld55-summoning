@@ -6,6 +6,7 @@ export default class TextButton extends Phaser.GameObjects.Container {
   private background: Phaser.GameObjects.Rectangle
   private text: Phaser.GameObjects.BitmapText
   private callback: () => void
+  private clickState: "ready" | "clickstart" = "ready"
 
   constructor(
     scene: Phaser.Scene,
@@ -16,6 +17,7 @@ export default class TextButton extends Phaser.GameObjects.Container {
   ) {
     super(scene, x, y)
 
+    this.on("pointerdown", this.onButtonDown, this)
     this.on("pointerup", this.onButtonUp, this)
     this.on("pointerover", this.onButtonOver, this)
     this.on("pointerout", this.onButtonOut, this)
@@ -52,6 +54,10 @@ export default class TextButton extends Phaser.GameObjects.Container {
     scene.add.existing(this)
   }
 
+  private onButtonDown() {
+    this.clickState = "clickstart"
+  }
+
   private onButtonOver() {
     this.background.fillColor = PaletteNum.HotPanda.Yellow
   }
@@ -62,6 +68,9 @@ export default class TextButton extends Phaser.GameObjects.Container {
 
   private onButtonUp() {
     this.background.fillColor = PaletteNum.HotPanda.DarkBlue
-    this.callback()
+    if (this.clickState === "clickstart") {
+      this.clickState = "ready"
+      this.callback()
+    }
   }
 }

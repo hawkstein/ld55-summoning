@@ -7,6 +7,7 @@ import TextButton from "../lib/TextButton"
 import { TEAL_16 } from "../lib/BitmapFontKey"
 import { levels } from "../game/levels"
 import { getSummonsPlugin } from "../plugins/Summons"
+import { SummonHud } from "./SummonHud"
 
 export class Game extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera
@@ -88,9 +89,9 @@ export class Game extends Scene {
 
     this.events.on("summoned", this.handleSummoned, this)
 
-    this.scene.launch("SummonHud")
-    this.scene.get("SummonHud").events.on("start", () => {
-      this.scene.setVisible(false, "SummonHud")
+    this.scene.launch(SummonHud.KEY)
+    this.scene.get(SummonHud.KEY).events.on("start", () => {
+      this.scene.setVisible(false, SummonHud.KEY)
     })
 
     this.summonButton = new TextButton(
@@ -113,12 +114,12 @@ export class Game extends Scene {
           })
         })
 
-        this.scene.pause("Game")
         this.scene.setVisible(true, "SummonHud")
         this.scene.setActive(true, "SummonHud")
         this.scene
           .get("SummonHud")
           .events.emit("check", { level: this.level, mistakes })
+        this.scene.pause("Game")
       }
     )
 

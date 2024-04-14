@@ -1,7 +1,7 @@
 import { Scene } from "phaser"
 import { PaletteNum, PaletteRGB } from "../lib/Palette"
 import TextButton from "../lib/TextButton"
-import { RED_20 } from "../lib/BitmapFontKey"
+import { RED_20, TEAL_16 } from "../lib/BitmapFontKey"
 import { SCENE_TRANSITION_DURATION } from "../lib/Animations"
 import PurchaseButton from "../game/PurchaseButton"
 
@@ -11,6 +11,8 @@ export class SummonHud extends Scene {
   message: Phaser.GameObjects.BitmapText
   purchases: number = 0
   mana: number = 0
+  resumeButton: TextButton
+  purchaseCount: Phaser.GameObjects.BitmapText
 
   constructor() {
     super({ key: SummonHud.KEY, visible: false, active: false })
@@ -39,7 +41,7 @@ export class SummonHud extends Scene {
 
     new PurchaseButton(
       this,
-      this.camera.centerX,
+      this.camera.centerX - 20,
       200,
       "Wizard\n(1 mana)",
       () => {
@@ -48,7 +50,7 @@ export class SummonHud extends Scene {
       "Human.png"
     )
 
-    new TextButton(
+    this.resumeButton = new TextButton(
       this,
       this.camera.centerX,
       this.camera.height - 40,
@@ -57,10 +59,29 @@ export class SummonHud extends Scene {
         this.resumeGame()
       }
     ).setScale(0.5)
+    this.resumeButton.setActive(false).setVisible(false)
+
+    this.message = this.add
+      .bitmapText(
+        this.camera.centerX,
+        100,
+        RED_20,
+        "",
+        20,
+        Phaser.GameObjects.BitmapText.ALIGN_CENTER
+      )
+      .setOrigin(0.5)
+      .setScale(0.5)
+
+    this.purchaseCount = this.add
+      .bitmapText(this.camera.centerX + 50, 200, TEAL_16, "0")
+      .setOrigin(0.5)
+      .setScale(0.5)
 
     this.events.on(
       "check",
       ({ level, mistakes }: { level: number; mistakes: number }) => {
+        this.resumeButton.setActive(true).setVisible(true)
         this.summonHumans(level, mistakes)
       }
     )
@@ -82,6 +103,7 @@ export class SummonHud extends Scene {
     if (this.mana > 0) {
       this.purchases++
       this.mana -= 1
+      this.purchaseCount.setText(this.purchases.toString())
     }
   }
 

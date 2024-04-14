@@ -76,10 +76,10 @@ export default class TextButton extends Phaser.GameObjects.Container {
   }
 
   private onButtonUp() {
-    this.background.fillColor = PaletteNum.HotPanda.DarkBlue
+    // this.background.fillColor = PaletteNum.HotPanda.DarkBlue
     if (this.clickState === "clickstart") {
+      this.clickState = "ready"
       this.callback()
     }
-    this.clickState = "ready"
   }
 }
