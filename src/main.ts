@@ -9,6 +9,7 @@ import { GameOver } from "./scenes/GameOver"
 import { LevelScore } from "./scenes/LevelScore"
 import { MainMenu } from "./scenes/MainMenu"
 import { Preloader } from "./scenes/Preloader"
+import { Success } from "./scenes/Success"
 import { SummonHud } from "./scenes/SummonHud"
 
 import { Game, Types } from "phaser"
@@ -50,7 +51,16 @@ const config: Types.Core.GameConfig = {
   dom: {
     createContainer: true,
   },
-  scene: [Boot, Preloader, MainMenu, MainGame, GameOver, SummonHud, LevelScore],
+  scene: [
+    Boot,
+    Preloader,
+    MainMenu,
+    MainGame,
+    GameOver,
+    SummonHud,
+    LevelScore,
+    Success,
+  ],
 }
 
 export default new Game(config)
