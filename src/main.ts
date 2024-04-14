@@ -1,6 +1,7 @@
 import { Enemy } from "./game/Enemy"
 import { Human } from "./game/Human"
 import { PaletteHash } from "./lib/Palette"
+import { Summons } from "./plugins/Summons"
 import { Boot } from "./scenes/Boot"
 import { Game as MainGame } from "./scenes/Game"
 import { GameOver } from "./scenes/GameOver"
@@ -10,19 +11,6 @@ import { Preloader } from "./scenes/Preloader"
 import { SummonHud } from "./scenes/SummonHud"
 
 import { Game, Types } from "phaser"
-
-export class Summons extends Phaser.Plugins.BasePlugin {
-  humans: number = 0
-  constructor(pluginManager: Phaser.Plugins.PluginManager) {
-    super(pluginManager)
-  }
-  getHumans() {
-    return this.humans
-  }
-  addHuman(amount: number) {
-    this.humans += amount
-  }
-}
 
 const config: Types.Core.GameConfig = {
   width: 150,
@@ -56,9 +44,7 @@ const config: Types.Core.GameConfig = {
     },
   },
   plugins: {
-    global: [
-      { key: "Summons", plugin: Summons, start: false, mapping: "summons" },
-    ],
+    global: [{ key: Summons.PLUGIN_KEY, plugin: Summons, start: false }],
   },
   dom: {
     createContainer: true,

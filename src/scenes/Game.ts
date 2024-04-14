@@ -5,8 +5,8 @@ import { setStoredSceneKey } from "./storeSceneKey"
 import { Creator } from "../../nonogram/src/index"
 import TextButton from "../lib/TextButton"
 import { TEAL_16 } from "../lib/BitmapFontKey"
-import { Summons } from "../main"
 import { levels } from "../game/levels"
+import { Summons, getSummonsPlugin } from "../plugins/Summons"
 
 export class Game extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera
@@ -166,8 +166,8 @@ export class Game extends Scene {
     }
     this.addHumans(humans)
 
-    const summons = this.plugins.get("Summons") as Summons | null
-    summons?.addHuman(3)
+    const summons = getSummonsPlugin(this.plugins)
+    summons.addHuman(3)
   }
 
   addHumans(amount: number) {
