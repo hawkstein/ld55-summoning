@@ -4,6 +4,7 @@ import { setStoredSceneKey } from "./storeSceneKey"
 import { RED_20 } from "../lib/BitmapFontKey"
 import TextButton from "../lib/TextButton"
 import { getScorePlugin } from "../plugins/Score"
+import { Scores } from "./Scores"
 
 export class MainMenu extends Scene {
   public static readonly KEY = "MainMenu"
@@ -48,7 +49,7 @@ export class MainMenu extends Scene {
       //   this.scene.start("Options")
       // }),
       new TextButton(this, camera.centerX, 0, "Scores", () => {
-        this.scene.start("Scores")
+        this.scene.start(Scores.KEY)
       }),
     ]
 

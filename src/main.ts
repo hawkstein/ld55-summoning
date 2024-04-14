@@ -10,6 +10,7 @@ import { GameOver } from "./scenes/GameOver"
 import { LevelScore } from "./scenes/LevelScore"
 import { MainMenu } from "./scenes/MainMenu"
 import { Preloader } from "./scenes/Preloader"
+import { Scores } from "./scenes/Scores"
 import { Success } from "./scenes/Success"
 import { SummonHud } from "./scenes/SummonHud"
 
@@ -64,6 +65,7 @@ const config: Types.Core.GameConfig = {
     SummonHud,
     LevelScore,
     Success,
+    Scores,
   ],
 }
 

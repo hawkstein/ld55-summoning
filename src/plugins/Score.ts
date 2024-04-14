@@ -12,7 +12,7 @@ export class Score extends Phaser.Plugins.BasePlugin {
     return this.currentScore
   }
 
-  getLatestScore() {
+  getLatestScore(): number | undefined {
     return this.recentScores[this.recentScores.length - 1]
   }
 
