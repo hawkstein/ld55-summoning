@@ -285,7 +285,7 @@ export class Game extends Scene {
   delayThenNextLevel() {
     this.time.delayedCall(3000, () => {
       const nextLevel = this.level + 1
-      const hasCompletedAllLevels = nextLevel >= 8
+      const hasCompletedAllLevels = nextLevel >= 2
       if (hasCompletedAllLevels) {
         const scorePlugin = getScorePlugin(this.plugins)
         scorePlugin.stopRun()
