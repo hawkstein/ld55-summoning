@@ -121,6 +121,16 @@ export class Game extends Scene {
     const previousHumans = summons.getHumans()
     console.log({ previousHumans })
     this.addHumans(previousHumans || 0)
+
+    this.add
+      .bitmapText(8, 8, TEAL_16, `Level\n${this.level + 1}/9`)
+      .setLineSpacing(4)
+      .setScale(0.5)
+
+    this.add
+      .bitmapText(this.camera.width - 40, 8, TEAL_16, `Wave\n1/1`)
+      .setLineSpacing(4)
+      .setScale(0.5)
   }
 
   createGrid() {
