@@ -10,6 +10,7 @@ import { getSummonsPlugin } from "../plugins/Summons"
 import { SummonHud } from "./SummonHud"
 import { Human } from "../game/Human"
 import { Enemy } from "../game/Enemy"
+import { Success } from "./Success"
 
 export class Game extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera
@@ -226,7 +227,13 @@ export class Game extends Scene {
 
   delayThenNextLevel() {
     this.time.delayedCall(3000, () => {
-      this.scene.start("LevelScore", { level: this.level })
+      const nextLevel = this.level + 1
+      const hasCompletedAllLevels = nextLevel >= 8
+      if (hasCompletedAllLevels) {
+        this.scene.start(Success.KEY)
+      } else {
+        this.scene.start("LevelScore", { level: this.level })
+      }
     })
   }
 }
