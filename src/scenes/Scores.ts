@@ -51,7 +51,7 @@ export class Scores extends Scene {
 
       for (let i = 0; i < highscores.length; i++) {
         const { name, score, seconds = 0 } = highscores[i]
-        const mins = Math.floor(seconds / 60)
+        const mins = Math.floor(seconds / 60000)
         const secs = seconds % 60
         this.add
           .bitmapText(
